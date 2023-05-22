@@ -14,7 +14,7 @@
 </div>
 
 
-# Introduction
+## Introduction
 
 GradFlow is a deep learning framework designed to be **simple**, **scalable** and **efficient** with **PyTorch-like API**. 
 
@@ -22,7 +22,7 @@ GradFlow provides all the necessary components for training a deep learning mode
 
 We use **reverse accumulation method** which involves calculating the gradient from the outermost operation inwards to implement auto gradient.
 
-# Install
+## Install
 - Upgrade pip
   ```bash
   pip install --upgrade pip
@@ -36,11 +36,11 @@ We use **reverse accumulation method** which involves calculating the gradient f
   pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
   ```
 
-# Usage
+## Usage
 
 GradFlow uses **PyTorch-like API**, So you can use it just like you would with pytorch.
 
-## Tensor
+### Tensor
 - You can create a tensor from either a list or an array of numpy.
   ```python
   import gradflow as gf
@@ -76,7 +76,7 @@ GradFlow uses **PyTorch-like API**, So you can use it just like you would with p
   # shape: (6, 5) -> (1, 6, 5) -> (6, 1, 5)
   ```
 
-## Autograd
+### Autograd
 - By default, we create gradflow Tensors that sets requires_grad to be true. Every operation you do on Tensor will be recorded in the **Computational Graph**.
   ```python
   w = gf.Tensor([1, 2, 3], dtype="float32"), v = gf.Tensor([2, 3, 4], dtype="float32")
@@ -102,12 +102,12 @@ GradFlow uses **PyTorch-like API**, So you can use it just like you would with p
   ```
 - You can use the `data` attribute to detach tensor from the computation graph
   ```python
-  a = df.Tensor(np.random.randn(3,5))
+  a = gf.Tensor(np.random.randn(3,5))
   a.data.requires_grad
   # False
   ```
 
-## Neural Network Library
+### Neural Network Library
 Just like Pytorch, you can use abstract class `nn.Module` to create your own model, `optim.Optimizer` to create your own optimizer, and `data.Dataset`, `data.DataLoader` to load your dataset.
 
 And we also provide some common **Models** and **Algorithms**, such as
@@ -118,8 +118,7 @@ And we also provide some common **Models** and **Algorithms**, such as
 
 You can read the [Pytorch Docs](https://pytorch.org/docs/stable/index.html) to see their usage or see the examples in this reposity.
 
-## Training
-
+### Training
 You can use the following templates to train the model.
 
 - Implement your **Dataset**
@@ -151,13 +150,13 @@ You can use the following templates to train the model.
   ```
 - Specify or customize the model and optimizer
   ```python
-  def train(batch_size=100, epochs=10, optimizer=df.optim.Adam,
+  def train(batch_size=100, epochs=10, optimizer=gf.optim.Adam,
             lr=0.001, weight_decay=0.001, hidden_dim=100, data_dir="data"):
       train_data = get_train_data()
       test_data = get_test_data()
       # Your DataLoader
-      train_loader = df.data.DataLoader(train_data, batch_size)
-      test_loader = df.data.DataLoader(test_data, batch_size)
+      train_loader = gf.data.DataLoader(train_data, batch_size)
+      test_loader = gf.data.DataLoader(test_data, batch_size)
       # Your Model
       model = MLPResNet(784, hidden_dim=hidden_dim)
       # Your Optimizer
@@ -199,8 +198,8 @@ You can use the following templates to train the model.
     return acc, loss_all / (idx + 1)
   ```
 
-## Examples
+### Examples
 In the [examples](examples) folder you can find several other samples.
 
-# License
+## License
 This project is licensed under the [Apache License (Version 2.0)](https://github.com/kcxain/gradflow/blob/master/LICENSE).
