@@ -13,15 +13,16 @@
 
 </div>
 
+
 # Introduction
 
 GradFlow is a deep learning framework designed to be **simple**, **scalable** and **efficient** with **PyTorch-like API**. 
 
 GradFlow provides all the necessary components for training a deep learning model, including initialization methods, optimizers, data loaders, and modules.
 
-We use reverse **accumulation method** which involves calculating the gradient from the outermost operation inwards to implement auto gradient.
+We use **reverse accumulation method** which involves calculating the gradient from the outermost operation inwards to implement auto gradient.
 
-# Install GradFlow
+# Install
 - Upgrade pip
   ```bash
   pip install --upgrade pip
