@@ -26,7 +26,7 @@ setup(
     version=find_version("gradflow/__init__.py"),
     author="kcxain",
     author_email="kcxain@gmail.com",
-    license="MIT",
+    license="Apache License 2.0",
     description=
     "A simple, scalable and efficient deep learning framework.",
     long_description=long_description,
