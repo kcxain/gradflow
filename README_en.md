@@ -13,38 +13,42 @@
 
 <h4 align="center">
     <p>
-      <b>中文</b> |
-       <a href="https://github.com/kcxain/gradflow/blob/master/README_en.md"><b>English</b></a>
+      <a href="https://github.com/kcxain/gradflow/blob/master/README.md"><b>中文</b></a> |
+       <b>English</b>
     <p>
 </h4>
 
 </div>
 
 
-## 简介
+## Introduction
 
-GradFlow 是一个简单、高效的深度学习框架。它实现了基于反向模式自动微分算法的自动求导机制，并提供了深度学习训练与推理的必备组件，如 optimizers, data loaders 和 modules 等。
+GradFlow is a deep learning framework designed to be **simple**, **scalable** and **efficient** with **PyTorch-like API**. 
 
-## 安装
-- 更新 pip
+GradFlow provides all the necessary components for training a deep learning model, including initialization methods, optimizers, data loaders, and modules.
+
+We use **reverse accumulation method** which involves calculating the gradient from the outermost operation inwards to implement auto gradient.
+
+## Install
+- Upgrade pip
   ```bash
   pip install --upgrade pip
   ```
-- 使用 pip 安装 GradFlow 的最新发布版本
+- To install latest release of GradFlow
   ```bash
   pip install gradflow
   ```
-- 如果你在中国，可以使用如下命令设置 Pypi 镜像
+- If you are in China, you could run this to have pip download packages from domestic mirror of pypi:
   ```bash
   pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
   ```
 
-## 快速上手
+## Usage
 
-GradFlow 各组件 API 的设计参考了 Pytorch，所以可以像使用 Pytorch 一样使用它，上手非常容易！
+GradFlow uses **PyTorch-like API**, So you can use it just like you would with pytorch.
 
 ### Tensor
-- 从 Python 的 list 或 numpy 的 array 中创建 Tensor
+- You can create a tensor from either a list or an array of numpy.
   ```python
   import gradflow as gf
   import numpy as np
@@ -54,7 +58,7 @@ GradFlow 各组件 API 的设计参考了 Pytorch，所以可以像使用 Pytorc
   b = gf.Tensor([2,2,3])
   # gradflow.Tensor([2 2 3])
   ```
-- 我们对 Tensor 类重写了 Python 的所有运算操作符，可使用这些运算符直接作用于整个 Tensor
+- Because we overload Python's basic operators, you can use any operator to directly operate on tensors
   ```python
   a + b
   # gradflow.Tensor([3 4 6])
@@ -63,7 +67,7 @@ GradFlow 各组件 API 的设计参考了 Pytorch，所以可以像使用 Pytorc
   a ** 2
   # gradflow.Tensor([1 4 9])
   ```
-- 我们还实现了一些常用的 Tensor 变换操作，如 reshape, sum, broadcast_to, transpose 等
+- You can also perform some special operations
   ```python
   a = df.Tensor(np.random.randn(3,5))
   a.shape
@@ -79,8 +83,8 @@ GradFlow 各组件 API 的设计参考了 Pytorch，所以可以像使用 Pytorc
   # shape: (6, 5) -> (1, 6, 5) -> (6, 1, 5)
   ```
 
-### 自动求导
-- GradFlow 默认将 Tensor 的 `requires_grad` 属性设置为 `True`，对 Tensor 进行的所有操作都将被记录在**计算图**中
+### Autograd
+- By default, we create gradflow Tensors that sets requires_grad to be true. Every operation you do on Tensor will be recorded in the **Computational Graph**.
   ```python
   w = gf.Tensor([1, 2, 3], dtype="float32"), v = gf.Tensor([2, 3, 4], dtype="float32")
   w.requires_grad
@@ -103,28 +107,28 @@ GradFlow 各组件 API 的设计参考了 Pytorch，所以可以像使用 Pytorc
   u.grad
   # gradflow.Tensor([2. 3. 4.])
   ```
-- 可以使用 `data` 属性得到从计算图中分离出来的 Tensor，它的值与原 Tensor 相同
+- You can use the `data` attribute to detach tensor from the computation graph
   ```python
   a = gf.Tensor(np.random.randn(3,5))
   a.data.requires_grad
   # False
   ```
 
-### 神经网络库
-和 Pytorh 一样，你可以继承抽象类 `nn.Module` 来创建自己的模型，`optim.Optimizer` 来创建自己的优化器, 以及 `data.Dataset`, `data.DataLoader` 来加载自己的数据集。
+### Neural Network Library
+Just like Pytorch, you can use abstract class `nn.Module` to create your own model, `optim.Optimizer` to create your own optimizer, and `data.Dataset`, `data.DataLoader` to load your dataset.
 
-当然，我们也实现了一些常见的模型，优化器等。如：
-- 数据预处理：`RandomFlipHorizontal`, `RandomCrop`
-- 初始化方法：`xavier_uniform`, `xavier_normal`, `kaiming_uniform`, `kaiming_normal`
-- 优化器：`SGD`, `Adam`
-- 常用模块：`Linear`, `Flatten`, `ReLU`, `Sequential`, `SoftmaxLoss`, `BatchNorm1d`, `LayerNorm1d`, `Dropout`, `Residual`
+And we also provide some common **Models** and **Algorithms**, such as
+- Data Pre-processing: `RandomFlipHorizontal`, `RandomCrop`
+- Init methods: `xavier_uniform`, `xavier_normal`, `kaiming_uniform`, `kaiming_normal`
+- Optimizers: `SGD`, `Adam`
+- Modules: `Linear`, `Flatten`, `ReLU`, `Sequential`, `SoftmaxLoss`, `BatchNorm1d`, `LayerNorm1d`, `Dropout`, `Residual`
 
-这些实现都按照 Pytorch 的 API 来设计，所以你可以在 [Pytorch Docs](https://pytorch.org/docs/stable/index.html) 中查看它们的用法。
+You can read the [Pytorch Docs](https://pytorch.org/docs/stable/index.html) to see their usage or see the examples in this reposity.
 
-### 训练
-下面给出一个使用 GradFlow 训练深度学习模型的基本流程：
+### Training
+You can use the following templates to train the model.
 
-- 实现自己的 **Dataset** 类
+- Implement your **Dataset**
   ```python
   class MyDataset(Dataset):
 
@@ -151,7 +155,7 @@ GradFlow 各组件 API 的设计参考了 Pytorch，所以可以像使用 Pytorc
     def __len__(self) -> int:
         return self.labels.shape[0]
   ```
-- 指定模型和优化器
+- Specify or customize the model and optimizer
   ```python
   def train(batch_size=100, epochs=10, optimizer=gf.optim.Adam,
             lr=0.001, weight_decay=0.001, hidden_dim=100, data_dir="data"):
@@ -170,7 +174,7 @@ GradFlow 各组件 API 的设计参考了 Pytorch，所以可以像使用 Pytorc
       test_acc, test_loss = epoch(test_loader, model)
       return (train_acc, train_loss, test_acc, test_loss)
   ```
-- 在每个 epoch 中，可以像这样更新参数
+- In each epoch, the parameters can be updated like this
   ```python
   def epoch(dataloader, model, opt=None):
     hit, total = 0, 0
@@ -201,8 +205,8 @@ GradFlow 各组件 API 的设计参考了 Pytorch，所以可以像使用 Pytorc
     return acc, loss_all / (idx + 1)
   ```
 
-### 更多例子
-我们在 [examples](examples) 文件夹下提供了使用 GradFlow 进行模型训练或推理的更多例子。
+### Examples
+In the [examples](examples) folder you can find several other samples.
 
 ## License
-本项目使用 [Apache License (Version 2.0)](https://github.com/kcxain/gradflow/blob/master/LICENSE).
+This project is licensed under the [Apache License (Version 2.0)](https://github.com/kcxain/gradflow/blob/master/LICENSE).
